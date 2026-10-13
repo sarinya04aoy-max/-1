@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ห้องทดลองพลังงานความร้อน ม.1</title>
+<style>
+:root{--bg:#071426;--panel:#10253d;--card:#15314e;--text:#eef7ff;--muted:#b7c9da;--hot:#ff7043;--cold:#4fc3f7;--warm:#ffd166;--ok:#50d890;--bad:#ff6b6b;--line:#9ad8ff;--accent:#7c4dff}
+*{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;background:radial-gradient(circle at 10% 0%,#16385f 0,#071426 45%,#04101d 100%);color:var(--text)}
+header{padding:28px 18px 18px;text-align:center}.badge{display:inline-block;padding:6px 12px;border:1px solid #ffffff33;border-radius:999px;background:#ffffff12;color:#d9eeff;font-size:.9rem}.title{font-size:clamp(1.7rem,4vw,3rem);font-weight:900;margin:10px 0 6px}.sub{color:var(--muted);max-width:900px;margin:auto;line-height:1.65}
+.wrap{width:min(1200px,94%);margin:auto;padding-bottom:56px}.grid{display:grid;grid-template-columns:360px 1fr;gap:18px;align-items:start}.card{background:linear-gradient(180deg,#173653e8,#0f2740e8);border:1px solid #ffffff1f;border-radius:20px;padding:18px;box-shadow:0 16px 40px #0004}.card h2,.card h3{margin-top:0}.controls label{display:flex;justify-content:space-between;gap:12px;margin:16px 0 6px;font-weight:700}.controls input[type=range]{width:100%;accent-color:var(--warm)}.mini{color:var(--muted);font-size:.9rem;line-height:1.55}.values{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.value{padding:12px;border-radius:14px;background:#07192c;border:1px solid #ffffff1c;text-align:center}.value b{font-size:1.4rem;display:block}.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}button{border:0;border-radius:12px;padding:11px 14px;font-weight:800;cursor:pointer;background:var(--accent);color:white}button.secondary{background:#234665}button.good{background:#177a52}button.warn{background:#9d5c00}button:focus,input:focus,textarea:focus{outline:3px solid #b5e4ff;outline-offset:2px}
+.lab{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.scene{min-height:340px;position:relative;overflow:hidden;background:linear-gradient(#071a2f,#0e3152 55%,#0b233a);border-radius:18px;border:1px solid #ffffff1f}.table{position:absolute;left:4%;right:4%;bottom:6%;height:74px;background:linear-gradient(#7b4b2a,#4f2f1d);border-radius:12px}.beaker{position:absolute;left:28%;bottom:78px;width:160px;height:190px;border:7px solid #cceeff;border-top:0;border-radius:0 0 30px 30px;background:linear-gradient(to top,rgba(79,195,247,.65) 0 var(--water-level),rgba(255,255,255,.04) var(--water-level) 100%);box-shadow:inset 0 0 22px #ffffff33}.beaker:before{content:"";position:absolute;left:-20px;right:-20px;top:-10px;height:18px;border:7px solid #cceeff;border-radius:50%;background:#0f2c49}.heater{position:absolute;left:25%;bottom:52px;width:185px;height:32px;border-radius:10px;background:#1e2430;box-shadow:0 0 28px rgba(255,112,67,var(--heat-glow))}.coil{position:absolute;left:18px;right:18px;top:8px;height:15px;border-radius:50%;border:4px solid #ff7043;box-shadow:0 0 18px #ff7043}.thermo{position:absolute;right:14%;bottom:85px;width:44px;height:210px}.thermo .stem{position:absolute;left:15px;top:0;width:14px;height:170px;background:#eaf7ff;border-radius:10px;border:3px solid #9fc9e8}.thermo .fill{position:absolute;left:18px;bottom:35px;width:8px;height:var(--temp-fill);background:linear-gradient(#ffd166,#ff5e57);border-radius:8px;transition:height .2s}.thermo .bulb{position:absolute;left:3px;bottom:0;width:38px;height:38px;border-radius:50%;background:#ff5e57;border:4px solid #eaf7ff}.bubble{position:absolute;border-radius:50%;background:#dff8ff99;border:1px solid #fff9;animation:rise var(--dur) linear infinite;opacity:var(--bubble-opacity)}@keyframes rise{from{transform:translateY(0) scale(.7)}to{transform:translateY(-135px) scale(1.15);opacity:0}}
+.readout{display:grid;gap:10px}.meter{padding:15px;border-radius:14px;background:#081b2f;border:1px solid #ffffff1f}.meter strong{font-size:1.5rem}.bar{height:10px;background:#17314a;border-radius:999px;overflow:hidden;margin-top:8px}.bar span{display:block;height:100%;width:var(--w);background:linear-gradient(90deg,#4fc3f7,#ffd166,#ff7043);transition:width .2s}.concept{margin-top:12px;padding:12px;border-radius:14px;background:#3b2c071f;border:1px solid #ffd16655;color:#fff4ca}
+.chart-card{margin-top:18px}.chart-head{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}canvas{width:100%;height:270px;background:#07192c;border-radius:14px;border:1px solid #ffffff18;margin-top:10px}.objectives{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}.obj{background:#ffffff0c;border:1px solid #ffffff1c;border-radius:14px;padding:13px;text-align:center}.obj b{display:block;margin-bottom:4px}
+.quiz{margin-top:18px}.q{padding:15px;margin:12px 0;border:1px solid #ffffff1c;border-radius:14px;background:#0a2138}.q p{font-weight:800}.q label{display:block;margin:8px 0;padding:8px 10px;border-radius:10px;background:#ffffff08}.result{margin-top:14px;padding:14px;border-radius:14px;background:#07192c;display:none}.answer-key{margin-top:10px;color:#d9efff;line-height:1.7}.builder{margin-top:18px}.builder input,.builder textarea{width:100%;background:#081b2f;color:var(--text);border:1px solid #ffffff30;border-radius:10px;padding:10px;margin:6px 0;font-size:16px}.builder-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.custom-list{margin-top:12px}.custom-item{padding:10px;border-radius:10px;background:#081b2f;margin:8px 0;border:1px solid #ffffff1c}.footer{color:#9ab1c5;text-align:center;padding:28px 12px 0;font-size:.9rem}
+@media(max-width:900px){.grid,.lab{grid-template-columns:1fr}.controls{order:0}.objectives{grid-template-columns:1fr}.scene{min-height:320px}.builder-grid{grid-template-columns:1fr}}
+
+.modebar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:0 0 18px}.modebtn.active{background:#ff7043}.ai-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:18px 0}.camera-wrap{position:relative;aspect-ratio:4/3;background:#020913;border-radius:16px;overflow:hidden;border:1px solid #ffffff22}.camera-wrap video,.camera-wrap canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}.camera-wrap canvas{pointer-events:none}.ai-status{padding:12px;border-radius:14px;background:#081b2f;border:1px solid #ffffff1f}.gesture-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:#ffffff10;border:1px solid #ffffff22;font-weight:800}.mission-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.mission-box{padding:12px;border-radius:14px;background:#081b2f;border:1px solid #ffffff1f;text-align:center}.mission-box b{display:block;font-size:1.25rem}.hidden{display:none!important}.note{padding:11px 13px;border-radius:12px;background:#3a260b;border:1px solid #ffd16655;color:#fff1bd}.progress{height:12px;background:#102d48;border-radius:999px;overflow:hidden;margin-top:8px}.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#50d890,#ffd166,#ff7043);transition:width .2s}.score{font-size:2rem;font-weight:900;color:#ffd166}.smallcaps{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:#9ab1c5}@media(max-width:900px){.ai-grid{grid-template-columns:1fr}.mission-grid{grid-template-columns:1fr 1fr}}
+
+/* ===== Thermal Battle ===== */
+.battle-panel{margin:18px 0;background:linear-gradient(180deg,#26142fe8,#101f38e8);border:1px solid #ff8a6544}
+.battle-top{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center}.fighter{text-align:center}.fighter .avatar{font-size:clamp(3rem,8vw,6rem);filter:drop-shadow(0 10px 18px #0008);transition:transform .18s}.fighter.hit .avatar{animation:hitShake .35s}.fighter.attack .avatar{animation:lunge .35s}.vs{font-weight:1000;font-size:1.5rem;color:#ffd166;text-shadow:0 0 14px #ff7043}
+.hpbar,.heatbar,.chargebar{height:16px;border-radius:999px;background:#07192c;overflow:hidden;border:1px solid #ffffff22;margin-top:6px}.hpbar span,.heatbar span,.chargebar span{display:block;height:100%;transition:width .25s}.hpbar span{background:linear-gradient(90deg,#50d890,#ffd166,#ff6b6b)}.heatbar span{background:linear-gradient(90deg,#4fc3f7,#50d890,#ffd166,#ff7043,#ff3d71)}.chargebar span{background:linear-gradient(90deg,#7c4dff,#ffd166,#ff7043)}
+.battle-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:14px 0}.battle-stat{background:#07192ccc;border:1px solid #ffffff1f;border-radius:14px;padding:10px;text-align:center}.battle-stat b{display:block;font-size:1.15rem}.heat-zone{font-weight:1000}.zone-cold{color:#4fc3f7}.zone-safe{color:#50d890}.zone-power{color:#ffd166}.zone-warning{color:#ff9f43}.zone-over{color:#ff5c7a}
+.battle-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.battle-actions button{min-width:130px}.battle-log{margin-top:12px;min-height:94px;max-height:180px;overflow:auto;background:#050d18;border:1px solid #ffffff18;border-radius:14px;padding:10px;font-size:.92rem;line-height:1.55}.battle-log div{padding:3px 0;border-bottom:1px dashed #ffffff12}.battle-log div:last-child{border:0}
+.battle-help{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}.battle-help div{background:#ffffff0b;border:1px solid #ffffff18;border-radius:12px;padding:9px;text-align:center}.battle-select{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}.battle-select select{background:#081b2f;color:#fff;border:1px solid #ffffff30;border-radius:10px;padding:10px;font-size:16px}
+.quiz-modal{position:fixed;inset:0;background:#000b;display:flex;align-items:center;justify-content:center;padding:18px;z-index:9999}.quiz-card{width:min(620px,96vw);background:#10253d;border:1px solid #ffffff2b;border-radius:20px;padding:20px;box-shadow:0 30px 80px #0009}.quiz-card h3{margin-top:0}.quiz-options{display:grid;gap:8px}.quiz-options button{text-align:left;background:#173653}.quiz-options button:hover{filter:brightness(1.12)}
+.float-dmg{position:absolute;left:50%;top:28%;transform:translateX(-50%);font-weight:1000;font-size:2rem;color:#ffd166;pointer-events:none;animation:floatDmg .9s forwards;text-shadow:0 3px 10px #000}.battle-stage{position:relative;overflow:hidden;border-radius:18px;padding:14px;background:radial-gradient(circle at 50% 30%,#64244655,#081526 70%);border:1px solid #ffffff1c}
+@keyframes floatDmg{0%{opacity:0;transform:translate(-50%,10px) scale(.8)}30%{opacity:1}100%{opacity:0;transform:translate(-50%,-55px) scale(1.15)}}@keyframes hitShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}@keyframes lunge{50%{transform:translateX(18px) scale(1.12)}}
+@media(max-width:900px){.battle-stats{grid-template-columns:1fr 1fr}.battle-help{grid-template-columns:1fr 1fr}.battle-top{grid-template-columns:1fr 44px 1fr}.battle-actions button{flex:1 1 42%}}
+
+@media(prefers-reduced-motion:reduce){.bubble{animation:none}}
+</style>
+</head>
+<body>
+<header>
+  <span class="badge">Interactive Science Lab • มัธยมศึกษาปีที่ 1</span>
+  <div class="title">🔥 ห้องทดลองพลังงานความร้อน</div>
+  <p class="sub">ปรับตัวแปร ทดลอง สังเกต และวิเคราะห์ผลแบบทันที เพื่อศึกษาความสัมพันธ์ระหว่าง <b>กำลังความร้อน</b> และ <b>มวลของน้ำ</b> ต่อการเปลี่ยนแปลงอุณหภูมิ</p>
+</header>
+<main class="wrap">
+  <section class="objectives">
+    <div class="obj"><b>🧪 ทดลอง</b><span class="mini">ปรับค่าตัวแปรและทดสอบสถานการณ์ต่าง ๆ</span></div>
+    <div class="obj"><b>👀 สังเกต</b><span class="mini">ดูอุณหภูมิ ภาพเคลื่อนไหว และกราฟแบบ real-time</span></div>
+    <div class="obj"><b>🧠 วิเคราะห์</b><span class="mini">อธิบายผลของกำลังความร้อนและมวลที่มีต่ออุณหภูมิ</span></div>
+  </section>
+
+  <section class="card" style="margin-bottom:18px">
+    <div class="modebar">
+      <button class="modebtn active" data-mode="manual">🎛️ Manual Lab</button>
+      <button class="modebtn secondary" data-mode="ai">👋 AI Gesture Lab</button>
+      <button class="modebtn secondary" data-mode="mission">🏆 Heat Challenge</button>
+      <button class="modebtn secondary" data-mode="battle">⚔️ Thermal Battle</button>
+    </div>
+    <div id="modeIntro" class="mini" style="text-align:center">โหมดปกติ: ใช้ Slider และปุ่มควบคุมการทดลอง</div>
+  </section>
+
+  <section id="aiPanel" class="card hidden">
+    <h2>👋 AI Gesture Lab • MediaPipe Hand Tracking</h2>
+    <div class="ai-grid">
+      <div>
+        <div class="camera-wrap">
+          <video id="webcam" autoplay playsinline muted></video>
+          <canvas id="handCanvas" width="640" height="480"></canvas>
+        </div>
+        <div class="buttons">
+          <button id="cameraBtn" class="good">📷 เปิดกล้อง AI</button>
+          <button id="cameraOffBtn" class="secondary">ปิดกล้อง</button>
+        </div>
+      </div>
+      <div style="display:grid;gap:10px">
+        <div class="ai-status"><span class="smallcaps">AI STATUS</span><br><strong id="aiState">ยังไม่ได้เปิดกล้อง</strong></div>
+        <div class="ai-status"><span class="smallcaps">GESTURE</span><br><span id="gesturePill" class="gesture-pill">— ไม่พบมือ</span></div>
+        <div class="ai-status"><b>การควบคุม</b><div class="mini">👆/👇 เลื่อนมือสูง–ต่ำ = ปรับกำลังความร้อน 100–1200 W<br>🤏 จีบนิ้ว = ล็อกค่ากำลัง<br>✋ แบมือค้าง = เริ่มทดลอง<br>✊ กำมือค้าง = หยุดชั่วคราว<br>👍 ชูนิ้วโป้งค้าง = เริ่มใหม่</div></div>
+        <div class="ai-status"><span class="mini">กำลังที่ AI เลือก</span><br><strong id="aiPower">500 W</strong><div class="progress"><span id="aiPowerBar"></span></div></div>
+        <div class="note">หมายเหตุ: โหมดกล้องต้องใช้อินเทอร์เน็ตเพื่อโหลด MediaPipe และบน iPad/iPhone ควรเปิดผ่านเว็บ HTTPS เพื่อให้ Safari อนุญาตกล้อง</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="missionPanel" class="card hidden">
+    <h2>🏆 Heat Challenge</h2>
+    <p class="mini">ภารกิจ: ทำให้น้ำถึงอุณหภูมิเป้าหมาย โดยใช้เวลาและพลังงานให้น้อยที่สุด สามารถเล่นด้วย Slider หรือเปิด AI Gesture Lab แล้วควบคุมด้วยมือ</p>
+    <div class="mission-grid">
+      <div class="mission-box"><span class="mini">เป้าหมาย</span><b id="targetTemp">60 °C</b></div>
+      <div class="mission-box"><span class="mini">เวลา</span><b id="missionTime">0.0 s</b></div>
+      <div class="mission-box"><span class="mini">พลังงาน</span><b id="missionEnergy">0 J</b></div>
+      <div class="mission-box"><span class="mini">คะแนน</span><b id="missionScore">—</b></div>
+    </div>
+    <label style="display:block;margin-top:14px;font-weight:800">เลือกอุณหภูมิเป้าหมาย <span id="targetV">60</span> °C</label>
+    <input id="targetSlider" type="range" min="40" max="90" value="60" step="5" style="width:100%" />
+    <div class="buttons"><button id="missionStart" class="good">🚀 เริ่มภารกิจ</button><button id="missionReset" class="secondary">↺ รีเซ็ตภารกิจ</button></div>
+    <div id="missionResult" class="result" style="display:none"></div>
+  </section>
+
+
+  <section id="battlePanel" class="card battle-panel hidden">
+    <h2>⚔️ Thermal Battle: Heat Master vs Monster</h2>
+    <p class="mini">บริหารอุณหภูมิและพลังงานให้เหมาะสม: ช่วง <b>60–79°C</b> คือ Power Zone โจมตีแรงที่สุด แต่ถ้า <b>90°C ขึ้นไป</b> จะ Overheat และเสียพลัง</p>
+    <div class="battle-select">
+      <label><b>เลือกด่าน:</b></label>
+      <select id="enemySelect">
+        <option value="slime">1 • 🔥 Ember Slime</option>
+        <option value="solar">2 • ☀️ Solar Bot</option>
+        <option value="ice">3 • ❄️ Ice Golem</option>
+        <option value="lava">4 • 🌋 Lava Monster</option>
+        <option value="dragon">BOSS • 🐉 Thermal Dragon</option>
+      </select>
+      <button id="battleStart" class="good">⚔️ เริ่มต่อสู้</button>
+      <button id="battleReset" class="secondary">↺ รีเซ็ต</button>
+      <button id="battleCamera" class="secondary">📷 เปิดกล้อง AI</button>
+      <span class="gesture-pill" id="battleGesture">— Gesture</span>
+    </div>
+    <div class="battle-stage" id="battleStage">
+      <div class="battle-top">
+        <div class="fighter" id="playerFighter"><div class="avatar">🧑‍🔬🔥</div><b>HEAT MASTER</b><div class="mini">HP <span id="playerHpText">100/100</span></div><div class="hpbar"><span id="playerHpBar" style="width:100%"></span></div></div>
+        <div class="vs">VS</div>
+        <div class="fighter" id="enemyFighter"><div class="avatar" id="enemyAvatar">🔥👾</div><b id="enemyName">Ember Slime</b><div class="mini">HP <span id="enemyHpText">70/70</span></div><div class="hpbar"><span id="enemyHpBar" style="width:100%"></span></div></div>
+      </div>
+      <div id="floatLayer"></div>
+    </div>
+    <div class="battle-stats">
+      <div class="battle-stat"><span class="mini">🌡 อุณหภูมิ</span><b id="battleTemp">25.0°C</b><div class="heatbar"><span id="battleTempBar" style="width:25%"></span></div></div>
+      <div class="battle-stat"><span class="mini">🔥 Heat Zone</span><b id="battleZone" class="heat-zone zone-cold">COLD</b></div>
+      <div class="battle-stat"><span class="mini">⚡ พลังสะสม</span><b id="battleEnergy">0 J</b><div class="chargebar"><span id="battleChargeBar" style="width:0%"></span></div></div>
+      <div class="battle-stat"><span class="mini">🛡 Shield</span><b id="battleShield">0%</b></div>
+      <div class="battle-stat"><span class="mini">🏆 Score</span><b id="battleScore">0</b></div>
+    </div>
+    <div class="battle-actions">
+      <button id="actCharge">✊ CHARGE</button>
+      <button id="actFire" class="warn">👉 FIRE BLAST</button>
+      <button id="actShield" class="secondary">✋ HEAT SHIELD</button>
+      <button id="actCool" class="good">👍 COOLING</button>
+      <button id="actQuiz">🧠 QUIZ BLAST</button>
+    </div>
+    <div class="battle-help">
+      <div><b>✊ กำหมัด</b><br><span class="mini">ชาร์จพลัง</span></div>
+      <div><b>👉 ชี้นิ้ว</b><br><span class="mini">ยิง Fire Blast</span></div>
+      <div><b>✋ แบมือ</b><br><span class="mini">สร้าง Shield</span></div>
+      <div><b>👍 นิ้วโป้ง</b><br><span class="mini">Cooling</span></div>
+    </div>
+    <div class="battle-log" id="battleLog"><div>พร้อมต่อสู้ — กด “เริ่มต่อสู้” แล้วบริหาร Heat Zone ให้ดี!</div></div>
+  </section>
+
+  <div id="battleQuizModal" class="quiz-modal hidden" role="dialog" aria-modal="true">
+    <div class="quiz-card"><h3>🧠 Quiz Blast</h3><p id="battleQuizQ"></p><div id="battleQuizOpts" class="quiz-options"></div><div class="buttons"><button id="closeBattleQuiz" class="secondary">ปิด</button></div></div>
+  </div>
+
+  <section class="grid">
+    <aside class="card controls">
+      <h2>🎛️ แผงควบคุม</h2>
+      <label>ตัวแปรที่ 1: กำลังความร้อน <span><b id="powerV">500</b> W</span></label>
+      <input id="power" type="range" min="100" max="1200" step="50" value="500" />
+      <div class="mini">ยิ่งกำลังสูง พลังงานที่ถ่ายโอนเข้าสู่น้ำต่อวินาทียิ่งมาก</div>
+
+      <label>ตัวแปรที่ 2: มวลของน้ำ <span><b id="massV">300</b> g</span></label>
+      <input id="mass" type="range" min="100" max="1000" step="50" value="300" />
+      <div class="mini">เมื่อมวลมากขึ้น ต้องใช้พลังงานมากขึ้นเพื่อให้อุณหภูมิสูงขึ้นเท่ากัน</div>
+
+      <label>อุณหภูมิเริ่มต้น <span><b id="startV">25</b> °C</span></label>
+      <input id="start" type="range" min="10" max="50" step="1" value="25" />
+
+      <div class="values">
+        <div class="value"><span class="mini">เวลา</span><b id="timeV">0.0 s</b></div>
+        <div class="value"><span class="mini">พลังงานสะสม</span><b id="energyV">0 J</b></div>
+      </div>
+      <div class="buttons">
+        <button id="startBtn">▶ เริ่มทดลอง</button>
+        <button id="pauseBtn" class="secondary">⏸ หยุดชั่วคราว</button>
+        <button id="resetBtn" class="warn">↺ เริ่มใหม่</button>
+      </div>
+      <p class="mini">แบบจำลองใช้สมการพื้นฐาน Q = mcΔT โดยประมาณการสูญเสียความร้อนบางส่วนเพื่อให้พฤติกรรมใกล้เคียงการทดลองจริง</p>
+    </aside>
+
+    <section>
+      <div class="card lab">
+        <div class="scene" id="scene" style="--water-level:66%;--temp-fill:40%;--heat-glow:.55;--bubble-opacity:.25">
+          <div class="table"></div>
+          <div class="beaker" aria-label="บีกเกอร์บรรจุน้ำ">
+            <span class="bubble" style="left:24px;bottom:12px;width:12px;height:12px;--dur:2.2s"></span>
+            <span class="bubble" style="left:70px;bottom:10px;width:9px;height:9px;--dur:2.8s"></span>
+            <span class="bubble" style="left:110px;bottom:15px;width:14px;height:14px;--dur:2.5s"></span>
+          </div>
+          <div class="heater"><div class="coil"></div></div>
+          <div class="thermo"><div class="stem"></div><div class="fill"></div><div class="bulb"></div></div>
+        </div>
+        <div class="readout">
+          <div class="meter"><span class="mini">อุณหภูมิน้ำขณะนี้</span><br><strong id="tempV">25.0 °C</strong><div class="bar"><span id="tempBar" style="--w:25%"></span></div></div>
+          <div class="meter"><span class="mini">อัตราการเพิ่มอุณหภูมิ</span><br><strong id="rateV">0.00 °C/s</strong></div>
+          <div class="meter"><span class="mini">สถานะ</span><br><strong id="stateV">พร้อมทดลอง</strong></div>
+          <div class="concept" id="concept">💡 ลองเพิ่มกำลังความร้อน แล้วสังเกตความชันของกราฟว่าจะเปลี่ยนอย่างไร</div>
+        </div>
+      </div>
+
+      <div class="card chart-card">
+        <div class="chart-head"><div><h2 style="margin-bottom:3px">📈 กราฟอุณหภูมิแบบ Real-time</h2><div class="mini">แกน X = เวลา (วินาที) • แกน Y = อุณหภูมิ (°C)</div></div><button id="clearGraph" class="secondary">ล้างกราฟ</button></div>
+        <canvas id="chart" width="900" height="300" aria-label="กราฟอุณหภูมิกับเวลา"></canvas>
+      </div>
+    </section>
+  </section>
+
+  <section class="card quiz">
+    <h2>✅ แบบประเมินท้ายกิจกรรม 10 ข้อ</h2>
+    <div id="quizBox"></div>
+    <div class="buttons"><button id="gradeBtn" class="good">ตรวจคำตอบ</button><button id="showKey" class="secondary">ดูเฉลย</button></div>
+    <div id="result" class="result" aria-live="polite"></div>
+    <div id="key" class="answer-key" hidden></div>
+  </section>
+
+  <section class="card builder">
+    <h2>✍️ ออกแบบโจทย์เพิ่มเอง</h2>
+    <p class="mini">ครูหรือนักเรียนสามารถเพิ่มคำถามใหม่ลงในหน้ากิจกรรมได้ทันที (ข้อมูลจะอยู่จนกว่าจะปิด/รีเฟรชหน้าเว็บ)</p>
+    <textarea id="newQ" rows="2" placeholder="พิมพ์คำถามใหม่..."></textarea>
+    <div class="builder-grid">
+      <input id="opt1" placeholder="ตัวเลือก A" />
+      <input id="opt2" placeholder="ตัวเลือก B" />
+      <input id="opt3" placeholder="ตัวเลือก C" />
+      <input id="opt4" placeholder="ตัวเลือก D" />
+    </div>
+    <label class="mini" for="correct">คำตอบที่ถูกต้อง</label>
+    <select id="correct" style="width:100%;background:#081b2f;color:#fff;border:1px solid #ffffff30;border-radius:10px;padding:10px;font-size:16px">
+      <option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option>
+    </select>
+    <div class="buttons"><button id="addQ">➕ เพิ่มโจทย์</button><button id="clearCustom" class="secondary">ล้างโจทย์ที่เพิ่ม</button></div>
+    <div id="customList" class="custom-list"></div>
+  </section>
+
+  <div class="footer">สื่อการเรียนรู้วิทยาศาสตร์ ม.1 • พลังงานความร้อน • Manual + MediaPipe AI Gesture + Heat Challenge</div>
+</main>
+<script>
+(()=>{
+const $=s=>document.querySelector(s);
+const power=$('#power'), mass=$('#mass'), start=$('#start');
+const powerV=$('#powerV'), massV=$('#massV'), startV=$('#startV'), timeV=$('#timeV'), energyV=$('#energyV'), tempV=$('#tempV'), rateV=$('#rateV'), stateV=$('#stateV'), concept=$('#concept'), scene=$('#scene'), tempBar=$('#tempBar');
+let running=false, t=0, temp=+start.value, energy=0, last=performance.now(), raf=null, pts=[];
+function syncLabels(){powerV.textContent=power.value;massV.textContent=mass.value;startV.textContent=start.value;if(!running&&t===0){temp=+start.value;drawReadout(0)}}
+power.addEventListener('input',syncLabels); mass.addEventListener('input',syncLabels); start.addEventListener('input',syncLabels);
+function drawReadout(rate){tempV.textContent=temp.toFixed(1)+' °C';rateV.textContent=rate.toFixed(2)+' °C/s';timeV.textContent=t.toFixed(1)+' s';energyV.textContent=Math.round(energy).toLocaleString()+' J';const pct=Math.max(0,Math.min(100,(temp-10)/90*100));tempBar.style.setProperty('--w',pct+'%');scene.style.setProperty('--temp-fill',Math.max(8,Math.min(160,pct*1.6))+'px');scene.style.setProperty('--heat-glow',Math.min(1,+power.value/1200));scene.style.setProperty('--bubble-opacity',temp>70?Math.min(.9,(temp-65)/35):.15);scene.style.setProperty('--water-level',Math.max(25,Math.min(82,+mass.value/1000*70+18))+'%');if(temp>=99){stateV.textContent='ใกล้จุดเดือด';concept.textContent='💡 อุณหภูมิของน้ำใกล้ 100°C แล้ว แบบจำลองจำกัดอุณหภูมิไว้ใกล้จุดเดือด';}else if(rate>0.8){stateV.textContent='ร้อนขึ้นอย่างรวดเร็ว';concept.textContent='🔎 ความชันกราฟสูง แสดงว่าอุณหภูมิเพิ่มเร็ว ลองเพิ่มมวลน้ำแล้วเปรียบเทียบ';}else if(rate>0.2){stateV.textContent='กำลังร้อนขึ้น';concept.textContent='💡 สังเกตว่าเมื่อมวลเพิ่ม อัตราการเพิ่มอุณหภูมิจะลดลงเมื่อกำลังความร้อนเท่าเดิม';}else stateV.textContent=running?'ร้อนขึ้นช้า ๆ':'พร้อมทดลอง';}
+function tick(now){if(!running)return;let dt=Math.min(.08,(now-last)/1000);last=now;t+=dt;const p=+power.value,mkg=+mass.value/1000,c=4186;const loss=Math.max(0,(temp-25)*1.7);const net=Math.max(0,p-loss);let rate=net/(mkg*c);temp+=rate*dt;energy+=p*dt;if(temp>99.7){temp=99.7;rate=0;}if(pts.length===0||t-pts[pts.length-1].t>.18){pts.push({t,temp});if(pts.length>400)pts.shift();drawChart();}drawReadout(rate);if(window.__heatMissionTick)window.__heatMissionTick({t,temp,energy});raf=requestAnimationFrame(tick)}
+$('#startBtn').addEventListener('click',()=>{if(running)return;running=true;last=performance.now();stateV.textContent='กำลังทดลอง';raf=requestAnimationFrame(tick)});
+$('#pauseBtn').addEventListener('click',()=>{running=false;if(raf)cancelAnimationFrame(raf);stateV.textContent='หยุดชั่วคราว'});
+function reset(all=true){running=false;if(raf)cancelAnimationFrame(raf);t=0;energy=0;temp=+start.value;if(all)pts=[];drawReadout(0);drawChart();stateV.textContent='พร้อมทดลอง'}
+$('#resetBtn').addEventListener('click',()=>reset(true));$('#clearGraph').addEventListener('click',()=>{pts=[];drawChart()});
+const canvas=$('#chart'),ctx=canvas.getContext('2d');
+function drawChart(){const w=canvas.width,h=canvas.height;ctx.clearRect(0,0,w,h);ctx.fillStyle='#07192c';ctx.fillRect(0,0,w,h);const L=58,R=20,T=18,B=42,pw=w-L-R,ph=h-T-B;ctx.strokeStyle='#ffffff24';ctx.lineWidth=1;ctx.font='13px sans-serif';ctx.fillStyle='#b9cfe0';for(let i=0;i<=5;i++){const y=T+ph*i/5;ctx.beginPath();ctx.moveTo(L,y);ctx.lineTo(w-R,y);ctx.stroke();const val=(100-i*20);ctx.fillText(val+'°C',10,y+4)}const maxT=Math.max(30,pts.length?pts[pts.length-1].t:30);for(let i=0;i<=6;i++){const x=L+pw*i/6;ctx.beginPath();ctx.moveTo(x,T);ctx.lineTo(x,h-B);ctx.stroke();ctx.fillText((maxT*i/6).toFixed(0)+'s',x-8,h-14)}ctx.strokeStyle='#9ad8ff';ctx.lineWidth=3;ctx.beginPath();pts.forEach((p,i)=>{const x=L+(p.t/maxT)*pw;const y=T+(1-Math.max(0,Math.min(100,p.temp))/100)*ph;i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke();if(pts.length){const p=pts[pts.length-1],x=L+(p.t/maxT)*pw,y=T+(1-p.temp/100)*ph;ctx.fillStyle='#ffd166';ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);ctx.fill()}}
+const qs=[
+['เมื่อเพิ่มกำลังความร้อน โดยมวลน้ำคงเดิม จะเกิดอะไรขึ้น?',['อุณหภูมิเพิ่มเร็วขึ้น','อุณหภูมิเพิ่มช้าลง','อุณหภูมิไม่เปลี่ยน','มวลน้ำเพิ่มขึ้น'],0],
+['เมื่อเพิ่มมวลน้ำ แต่ใช้กำลังความร้อนเท่าเดิม อุณหภูมิจะเป็นอย่างไร?',['เพิ่มเร็วขึ้น','เพิ่มช้าลง','คงที่เสมอ','ลดลงทันที'],1],
+['หน่วยของพลังงานความร้อนในระบบ SI คือข้อใด?',['วัตต์','จูล','องศาเซลเซียส','กรัม'],1],
+['กราฟที่ชันมากขึ้นหมายถึงอะไร?',['อุณหภูมิเปลี่ยนเร็วขึ้น','มวลเพิ่มขึ้นเสมอ','เวลาหยุดเดิน','พลังงานเป็นศูนย์'],0],
+['ตัวแปรต้นในการทดลองนี้สามารถเป็นข้อใด?',['กำลังความร้อน','สีของบีกเกอร์','ชื่อผู้ทดลอง','ขนาดตัวอักษร'],0],
+['ตัวแปรตามที่สังเกตได้ชัดเจนคือข้อใด?',['อุณหภูมิของน้ำ','ชื่อห้องทดลอง','ชนิดของปุ่ม','จำนวนคำถาม'],0],
+['ถ้า P = 500 W หมายความว่าอย่างไร?',['ให้พลังงาน 500 J ต่อวินาที','มีมวล 500 g','อุณหภูมิ 500°C','ใช้เวลา 500 s เสมอ'],0],
+['สมการ Q = mcΔT ใช้อธิบายเรื่องใด?',['พลังงานความร้อนที่ทำให้อุณหภูมิเปลี่ยน','แรงโน้มถ่วง','การหักเหของแสง','กระแสไฟฟ้าเท่านั้น'],0],
+['ถ้าต้องการทดลองอย่างยุติธรรมเมื่อเปรียบเทียบกำลังความร้อน ควรทำอย่างไร?',['คงมวลน้ำและอุณหภูมิเริ่มต้นให้เท่ากัน','เปลี่ยนทุกตัวแปรพร้อมกัน','ใช้คนละหน่วย','ไม่ต้องบันทึกผล'],0],
+['ข้อสรุปใดเหมาะสมที่สุด?',['พลังงานที่มากขึ้นทำให้อุณหภูมิเปลี่ยนได้เร็วขึ้นเมื่อเงื่อนไขอื่นคงที่','มวลไม่มีผลต่อการเปลี่ยนอุณหภูมิ','อุณหภูมิไม่เกี่ยวกับพลังงาน','กำลังความร้อนมีหน่วยเป็นกรัม'],0]
+];
+const quizBox=$('#quizBox');function renderQuiz(){quizBox.innerHTML=qs.map((q,i)=>`<div class="q"><p>${i+1}. ${q[0]}</p>${q[1].map((o,j)=>`<label><input type="radio" name="q${i}" value="${j}"> ${String.fromCharCode(65+j)}. ${o}</label>`).join('')}</div>`).join('')}
+renderQuiz();$('#gradeBtn').addEventListener('click',()=>{let score=0;qs.forEach((q,i)=>{const a=document.querySelector(`input[name=q${i}]:checked`);if(a&&+a.value===q[2])score++});const r=$('#result');r.style.display='block';r.innerHTML=`<b>คะแนน ${score}/${qs.length}</b><br>${score>=8?'ยอดเยี่ยม! เข้าใจแนวคิดพลังงานความร้อนได้ดี 🎉':score>=6?'ดีมาก ลองทบทวนข้อที่ยังไม่มั่นใจอีกครั้ง 👍':'ลองปรับตัวแปรในห้องทดลองอีกครั้ง แล้วสังเกตกราฟก่อนทำแบบประเมินซ้ำ 🔬'}`});
+$('#showKey').addEventListener('click',()=>{const k=$('#key');k.hidden=!k.hidden;k.innerHTML=qs.map((q,i)=>`${i+1}) ${String.fromCharCode(65+q[2])}. ${q[1][q[2]]}`).join('<br>')});
+let custom=[];function renderCustom(){const box=$('#customList');box.innerHTML=custom.length?'<h3>โจทย์ที่เพิ่ม</h3>'+custom.map((x,i)=>`<div class="custom-item"><b>${i+1}. ${x.q}</b><br><span class="mini">A ${x.o[0]} • B ${x.o[1]} • C ${x.o[2]} • D ${x.o[3]} • เฉลย ${String.fromCharCode(65+x.a)}</span></div>`).join(''):'<span class="mini">ยังไม่มีโจทย์ที่เพิ่ม</span>'}
+$('#addQ').addEventListener('click',()=>{const q=$('#newQ').value.trim(),o=[$('#opt1').value.trim(),$('#opt2').value.trim(),$('#opt3').value.trim(),$('#opt4').value.trim()],a=+$('#correct').value;if(!q||o.some(v=>!v)){alert('กรุณากรอกคำถามและตัวเลือกให้ครบ');return}custom.push({q,o,a});$('#newQ').value='';['#opt1','#opt2','#opt3','#opt4'].forEach(id=>$(id).value='');renderCustom()});$('#clearCustom').addEventListener('click',()=>{custom=[];renderCustom()});
+syncLabels();drawChart();renderCustom();
+})();
+</script>
+
+<script>
+(()=>{
+const $=s=>document.querySelector(s);
+let currentMode='manual', missionActive=false, missionStartT=0, missionStartE=0, missionDone=false;
+const modeIntro=$('#modeIntro'), aiPanel=$('#aiPanel'), missionPanel=$('#missionPanel'), battlePanel=$('#battlePanel');
+function setMode(mode){currentMode=mode;document.querySelectorAll('.modebtn').forEach(b=>{b.classList.toggle('active',b.dataset.mode===mode);b.classList.toggle('secondary',b.dataset.mode!==mode)});aiPanel.classList.toggle('hidden',mode!=='ai');missionPanel.classList.toggle('hidden',mode!=='mission');battlePanel.classList.toggle('hidden',mode!=='battle');window.__battleModeActive=mode==='battle';modeIntro.textContent=mode==='manual'?'โหมดปกติ: ใช้ Slider และปุ่มควบคุมการทดลอง':mode==='ai'?'โหมด AI: ใช้เว็บแคมและท่าทางมือควบคุมกำลังความร้อน':mode==='mission'?'โหมดภารกิจ: ทำให้น้ำถึงอุณหภูมิเป้าหมายและสะสมคะแนน':'โหมดต่อสู้: ใช้ Heat Zone + Gesture เอาชนะ Monster';}
+document.querySelectorAll('.modebtn').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));
+const target=$('#targetSlider');target.addEventListener('input',()=>{$('#targetV').textContent=target.value;$('#targetTemp').textContent=target.value+' °C'});
+$('#missionStart').addEventListener('click',()=>{document.querySelector('[data-mode="mission"]').click();document.querySelector('#resetBtn').click();missionActive=true;missionDone=false;missionStartT=0;missionStartE=0;$('#missionResult').style.display='none';$('#missionScore').textContent='กำลังเล่น';setTimeout(()=>document.querySelector('#startBtn').click(),50)});
+$('#missionReset').addEventListener('click',()=>{missionActive=false;missionDone=false;document.querySelector('#resetBtn').click();$('#missionTime').textContent='0.0 s';$('#missionEnergy').textContent='0 J';$('#missionScore').textContent='—';$('#missionResult').style.display='none'});
+window.__heatMissionTick=({t,temp,energy})=>{if(!missionActive||missionDone)return;$('#missionTime').textContent=t.toFixed(1)+' s';$('#missionEnergy').textContent=Math.round(energy).toLocaleString()+' J';const goal=+target.value;if(temp>=goal){missionDone=true;missionActive=false;document.querySelector('#pauseBtn').click();const overshoot=Math.abs(temp-goal);const score=Math.max(0,Math.round(1000-t*5-energy/150-overshoot*80));$('#missionScore').textContent=score;const box=$('#missionResult');box.style.display='block';box.innerHTML=`<div class="score">⭐ ${score} คะแนน</div><b>ภารกิจสำเร็จ!</b><br>อุณหภูมิ ${temp.toFixed(1)} °C • เวลา ${t.toFixed(1)} s • พลังงาน ${Math.round(energy).toLocaleString()} J<br><span class="mini">ลองเล่นซ้ำโดยปรับกำลังความร้อนให้เหมาะสม แล้วเปรียบเทียบคะแนน</span>`;}};
+})();
+</script>
+<script type="module">
+import {HandLandmarker, FilesetResolver, DrawingUtils} from 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22-rc.20250304/+esm';
+const $=s=>document.querySelector(s);
+const video=$('#webcam'), canvas=$('#handCanvas'), ctx=canvas.getContext('2d'), aiState=$('#aiState'), gesturePill=$('#gesturePill'), aiPower=$('#aiPower'), aiPowerBar=$('#aiPowerBar');
+let landmarker=null,stream=null,camRunning=false,lastVideoTime=-1,lastGesture='',gestureSince=0,pinchLock=false,lastSet=0;
+const connections=HandLandmarker.HAND_CONNECTIONS;
+function dist(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}
+function fingerOpen(lm,tip,pip){return dist(lm[tip],lm[0])>dist(lm[pip],lm[0])+0.025}
+function classify(lm){const pinch=dist(lm[4],lm[8])<0.055;const idx=fingerOpen(lm,8,6),mid=fingerOpen(lm,12,10),ring=fingerOpen(lm,16,14),pinky=fingerOpen(lm,20,18);const thumbUp=lm[4].y<lm[3].y-0.04&&lm[4].y<lm[5].y&& !idx&&!mid&&!ring&&!pinky;if(thumbUp)return window.__battleModeActive?'👍 COOL':'👍 RESET';if(pinch)return '🤏 LOCK';if(idx&&!mid&&!ring&&!pinky)return '👉 FIRE';if(idx&&mid&&ring&&pinky)return window.__battleModeActive?'✋ SHIELD':'✋ START';if(!idx&&!mid&&!ring&&!pinky)return window.__battleModeActive?'✊ CHARGE':'✊ PAUSE';return '🖐️ CONTROL';}
+function fireGesture(g){const now=performance.now();if(g!==lastGesture){lastGesture=g;gestureSince=now;return}if(now-gestureSince<700)return;if(window.__battleModeActive){window.dispatchEvent(new CustomEvent('heatGesture',{detail:g}));gestureSince=now+650;return;}if(g==='✋ START')$('#startBtn').click();if(g==='✊ PAUSE')$('#pauseBtn').click();if(g==='👍 RESET')$('#resetBtn').click();gestureSince=now+650;}
+async function loadAI(){if(landmarker)return;aiState.textContent='กำลังโหลดโมเดล MediaPipe…';const vision=await FilesetResolver.forVisionTasks('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22-rc.20250304/wasm');landmarker=await HandLandmarker.createFromOptions(vision,{baseOptions:{modelAssetPath:'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task',delegate:'GPU'},runningMode:'VIDEO',numHands:1,minHandDetectionConfidence:.55,minTrackingConfidence:.55});aiState.textContent='MediaPipe พร้อมใช้งาน';}
+async function startCamera(){try{await loadAI();stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:640},height:{ideal:480}},audio:false});video.srcObject=stream;await video.play();camRunning=true;aiState.textContent='กล้องทำงาน • ยกมือเข้ากรอบ';requestAnimationFrame(loop)}catch(e){console.error(e);aiState.textContent='เปิดกล้องไม่ได้: '+(e?.message||e);gesturePill.textContent='ตรวจสอบสิทธิ์กล้อง / HTTPS';}}
+function stopCamera(){camRunning=false;if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}video.srcObject=null;ctx.clearRect(0,0,canvas.width,canvas.height);aiState.textContent='ปิดกล้องแล้ว';gesturePill.textContent='— ไม่พบมือ'}
+async function loop(){if(!camRunning)return;if(video.readyState>=2&&video.currentTime!==lastVideoTime){lastVideoTime=video.currentTime;const res=landmarker.detectForVideo(video,performance.now());ctx.clearRect(0,0,canvas.width,canvas.height);if(res.landmarks?.length){const lm=res.landmarks[0];const draw=new DrawingUtils(ctx);draw.drawConnectors(lm,connections,{lineWidth:4});draw.drawLandmarks(lm,{radius:3,lineWidth:1});const g=classify(lm);gesturePill.textContent=g;pinchLock=g==='🤏 LOCK';fireGesture(g);if(!pinchLock){const palmY=(lm[0].y+lm[5].y+lm[9].y+lm[13].y+lm[17].y)/5;const normalized=Math.max(0,Math.min(1,1-palmY));const watts=Math.round((100+normalized*1100)/50)*50;if(performance.now()-lastSet>80){$('#power').value=watts;$('#power').dispatchEvent(new Event('input',{bubbles:true}));aiPower.textContent=watts+' W';aiPowerBar.style.width=((watts-100)/1100*100)+'%';lastSet=performance.now();}}}else{gesturePill.textContent='— ไม่พบมือ'}}requestAnimationFrame(loop)}
+$('#cameraBtn').addEventListener('click',startCamera);$('#cameraOffBtn').addEventListener('click',stopCamera);window.addEventListener('pagehide',stopCamera);
+if(!navigator.mediaDevices?.getUserMedia)aiState.textContent='เบราว์เซอร์นี้ไม่รองรับการเปิดกล้อง หรือหน้าเว็บไม่ได้เปิดผ่าน HTTPS';
+</script>
+
+<script>
+(()=>{
+const $=s=>document.querySelector(s);
+const enemies={
+ slime:{name:'Ember Slime',avatar:'🔥👾',hp:70,atk:[6,11],interval:4600,resist:0},
+ solar:{name:'Solar Bot',avatar:'☀️🤖',hp:95,atk:[8,14],interval:4200,resist:.05},
+ ice:{name:'Ice Golem',avatar:'❄️🗿',hp:125,atk:[10,16],interval:4000,resist:.12},
+ lava:{name:'Lava Monster',avatar:'🌋👹',hp:155,atk:[12,19],interval:3600,resist:.18},
+ dragon:{name:'Thermal Dragon',avatar:'🐉🔥',hp:240,atk:[15,24],interval:3200,resist:.22}
+};
+const quiz=[
+ ['เมื่อเพิ่มกำลังความร้อน แต่มวลน้ำคงเดิม จะเกิดอะไรขึ้น?',['อุณหภูมิเพิ่มเร็วขึ้น','อุณหภูมิเพิ่มช้าลง','มวลน้ำเพิ่ม','อุณหภูมิไม่เปลี่ยน'],0],
+ ['หน่วยของพลังงานในระบบ SI คือข้อใด?',['วัตต์','จูล','กรัม','องศาเซลเซียส'],1],
+ ['ถ้ามวลน้ำเพิ่ม แต่กำลังความร้อนเท่าเดิม อุณหภูมิจะ...',['เพิ่มเร็วขึ้น','เพิ่มช้าลง','คงที่เสมอ','ลดลงทันที'],1],
+ ['สมการ Q = mcΔT อธิบายข้อใด?',['พลังงานที่ทำให้อุณหภูมิเปลี่ยน','แรงโน้มถ่วง','ความเร็วแสง','แรงเสียดทานเท่านั้น'],0],
+ ['500 W หมายถึงอะไร?',['500 J ต่อวินาที','500 g ต่อวินาที','500°C','500 J ต่อกรัมเสมอ'],0]
+];
+let active=false,playerHp=100,enemyHp=70,enemyMax=70,temp=25,stored=0,shield=0,score=0,enemyTimer=null,stage='slime',coolReady=true,battleStartedAt=0;
+function log(msg){const box=$('#battleLog');const d=document.createElement('div');d.textContent=msg;box.prepend(d);while(box.children.length>8)box.lastChild.remove();}
+function zone(){if(temp<40)return ['COLD','zone-cold',.7];if(temp<60)return ['SAFE','zone-safe',1];if(temp<80)return ['POWER','zone-power',1.45];if(temp<90)return ['WARNING','zone-warning',1.05];return ['OVERHEAT','zone-over',.55];}
+function render(){const z=zone();$('#playerHpText').textContent=Math.max(0,Math.round(playerHp))+'/100';$('#playerHpBar').style.width=Math.max(0,playerHp)+'%';$('#enemyHpText').textContent=Math.max(0,Math.round(enemyHp))+'/'+enemyMax;$('#enemyHpBar').style.width=Math.max(0,enemyHp/enemyMax*100)+'%';$('#battleTemp').textContent=temp.toFixed(1)+'°C';$('#battleTempBar').style.width=Math.max(0,Math.min(100,temp))+'%';$('#battleZone').textContent=z[0];$('#battleZone').className='heat-zone '+z[1];$('#battleEnergy').textContent=Math.round(stored).toLocaleString()+' J';$('#battleChargeBar').style.width=Math.min(100,stored/18000*100)+'%';$('#battleShield').textContent=Math.round(shield*100)+'%';$('#battleScore').textContent=Math.round(score);}
+function floatText(text,target='enemy'){const host=$('#battleStage');const e=document.createElement('div');e.className='float-dmg';e.textContent=text;e.style.left=target==='enemy'?'75%':'25%';host.appendChild(e);setTimeout(()=>e.remove(),950)}
+function start(){clearInterval(enemyTimer);stage=$('#enemySelect').value;const e=enemies[stage];active=true;window.__battleModeActive=true;playerHp=100;enemyHp=enemyMax=e.hp;temp=25;stored=0;shield=0;score=0;coolReady=true;battleStartedAt=performance.now();$('#enemyName').textContent=e.name;$('#enemyAvatar').textContent=e.avatar;$('#battleLog').innerHTML='';log('⚔️ เริ่มด่าน '+e.name+' — เป้าหมายคือรักษา Heat Zone ให้เหมาะสม');render();enemyTimer=setInterval(enemyTurn,e.interval);}
+function end(win){active=false;clearInterval(enemyTimer);enemyTimer=null;if(win){const seconds=(performance.now()-battleStartedAt)/1000;const bonus=Math.max(0,Math.round(500-seconds*4+playerHp*3));score+=bonus;log('🏆 ชนะ! โบนัส '+bonus+' คะแนน');floatText('VICTORY!','enemy')}else{log('💥 พ่ายแพ้ ลองวางแผน Heat Zone ใหม่');floatText('TRY AGAIN','player')}render();}
+function enemyTurn(){if(!active)return;const e=enemies[stage];let dmg=e.atk[0]+Math.random()*(e.atk[1]-e.atk[0]);if(shield>0){dmg*=1-shield;shield*=.35;log('🛡 Shield ลดความเสียหายของศัตรู');}playerHp-=dmg;temp+=stage==='ice'?-3:stage==='lava'||stage==='dragon'?4:1;$('#playerFighter').classList.add('hit');setTimeout(()=>$('#playerFighter').classList.remove('hit'),360);floatText('-'+Math.round(dmg),'player');log('👾 '+e.name+' โจมตี '+Math.round(dmg)+' damage');if(playerHp<=0)end(false);render();}
+function charge(){if(!active)return log('กด “เริ่มต่อสู้” ก่อน');const p=+$('#power').value||500,mkg=(+$('#mass').value||300)/1000,c=4186,seconds=2.2;const e=p*seconds;stored=Math.min(22000,stored+e);temp+=e/(mkg*c);score+=4;$('#playerFighter').classList.add('attack');setTimeout(()=>$('#playerFighter').classList.remove('attack'),350);log('✊ CHARGE +'+Math.round(e)+' J • อุณหภูมิ '+temp.toFixed(1)+'°C');if(temp>=100){temp=100;playerHp-=8;stored*=.75;log('⚠️ OVERHEAT! สูญเสีย HP และพลังสะสม');floatText('OVERHEAT','player');}render();}
+function fire(){if(!active)return log('กด “เริ่มต่อสู้” ก่อน');if(stored<700)return log('⚡ พลังยังน้อยเกินไป — CHARGE ก่อน');const e=enemies[stage],z=zone();let dmg=(stored/850)*z[2]*(1-e.resist);dmg=Math.max(4,Math.min(52,dmg));if(temp>=90){playerHp-=5;log('🔥 ยิงตอน Overheat: โจมตีอ่อนลงและเสีย HP');}enemyHp-=dmg;score+=Math.round(dmg*8*z[2]);stored*=.18;temp=Math.max(20,temp-4);$('#enemyFighter').classList.add('hit');setTimeout(()=>$('#enemyFighter').classList.remove('hit'),360);floatText('-'+Math.round(dmg),'enemy');log('👉 FIRE BLAST '+Math.round(dmg)+' damage • '+z[0]+' zone');if(enemyHp<=0){enemyHp=0;end(true);}render();}
+function makeShield(){if(!active)return log('กด “เริ่มต่อสู้” ก่อน');const z=zone();shield=Math.min(.75,shield+((z[0]==='SAFE'||z[0]==='POWER')?.42:.26));stored=Math.max(0,stored-900);score+=20;log('✋ HEAT SHIELD '+Math.round(shield*100)+'%');render();}
+function cool(){if(!active)return log('กด “เริ่มต่อสู้” ก่อน');if(!coolReady)return log('❄️ Cooling ยังไม่พร้อม');temp=Math.max(20,temp-18);stored*=.8;coolReady=false;log('👍 COOLING ลดอุณหภูมิ 18°C');render();setTimeout(()=>{coolReady=true;log('❄️ Cooling พร้อมใช้อีกครั้ง')},3500);}
+function openQuiz(){if(!active)return log('กด “เริ่มต่อสู้” ก่อน');const q=quiz[Math.floor(Math.random()*quiz.length)];$('#battleQuizQ').textContent=q[0];const box=$('#battleQuizOpts');box.innerHTML='';q[1].forEach((o,i)=>{const b=document.createElement('button');b.textContent=String.fromCharCode(65+i)+'. '+o;b.onclick=()=>{if(i===q[2]){enemyHp-=35;score+=300;stored+=1200;log('🧠 Quiz ถูก! SUPER HEAT ATTACK 35 damage');floatText('-35 QUIZ!','enemy');}else{playerHp-=10;log('❌ Quiz ผิด! เสีย 10 HP');floatText('-10','player');}$('#battleQuizModal').classList.add('hidden');if(enemyHp<=0){enemyHp=0;end(true)}else if(playerHp<=0)end(false);render();};box.appendChild(b)});$('#battleQuizModal').classList.remove('hidden');}
+$('#battleStart').addEventListener('click',start);$('#battleReset').addEventListener('click',start);$('#actCharge').addEventListener('click',charge);$('#actFire').addEventListener('click',fire);$('#actShield').addEventListener('click',makeShield);$('#actCool').addEventListener('click',cool);$('#actQuiz').addEventListener('click',openQuiz);$('#closeBattleQuiz').addEventListener('click',()=>$('#battleQuizModal').classList.add('hidden'));
+$('#battleCamera').addEventListener('click',()=>{const cam=$('#cameraBtn');if(cam){cam.click();log('📷 เปิดกล้อง AI แล้ว — ใช้ Gesture ในโหมด Battle ได้')}});
+window.addEventListener('heatGesture',e=>{if(!window.__battleModeActive)return;const g=e.detail;const bg=$('#battleGesture');if(bg)bg.textContent=g;if(g==='✊ CHARGE')charge();else if(g==='👉 FIRE')fire();else if(g==='✋ SHIELD')makeShield();else if(g==='👍 COOL')cool();});
+render();
+})();
+</script>
+
+</body>
+</html>
